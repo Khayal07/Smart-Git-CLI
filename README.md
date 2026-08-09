@@ -68,7 +68,7 @@ pip install git+https://github.com/Khayal07/Smart-Git-CLI.git
 # pip install -e /path/to/smart-git-cli
 ```
 
-###2. Add your API key
+**2. Add your API key**
 
 Place a `.env` file in the project where you will run `smart-git` (smart-git reads it from the **current folder**):
 
@@ -85,7 +85,7 @@ OPENAI_API_KEY=sk-your-api-key
 
 > `.env` is git-ignored automatically, so the key never ends up in your commits.
 
-###3. Use it anywhere
+**3. Use it anywhere**
 
 ```bash
 smart-git commit     # in your project, after staging some changes
