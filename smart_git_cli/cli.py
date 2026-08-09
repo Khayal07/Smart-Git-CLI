@@ -14,7 +14,10 @@ from smart_git_cli.ai_engine import generate_commit_message, generate_release_no
 from smart_git_cli.errors import SmartGitError
 from smart_git_cli.git_engine import GitEngine
 
-app = typer.Typer(help="AI assistant for Conventional Commits and release notes.")
+app = typer.Typer(
+    invoke_without_command=True,
+    help="AI assistant for Conventional Commits and release notes.",
+)
 console = Console()
 err_console = Console(stderr=True)
 
@@ -28,10 +31,14 @@ def _fail(exc: Exception) -> None:
 
 @app.callback()
 def main(
+    ctx: typer.Context,
     version: bool = typer.Option(False, "--version", help="Show version and exit."),
 ) -> None:
     if version:
         console.print(f"smart-git v{VERSION}")
+        raise typer.Exit()
+    if ctx.invoked_subcommand is None:
+        console.print(ctx.get_help())
         raise typer.Exit()
 
 

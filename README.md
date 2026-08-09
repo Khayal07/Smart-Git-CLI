@@ -30,8 +30,8 @@ A lightweight CLI developer tool that inspects your `git diff` and automatically
 
 ```bash
 pip install -e .
-# or
-pip install -r requirements.txt
+# or install the dependencies directly
+pip install typer rich GitPython openai
 ```
 
 Then set your API key:
