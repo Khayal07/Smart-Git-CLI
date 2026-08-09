@@ -1,24 +1,96 @@
-# Smart Git CLI (`smart-git-cli`) 🚀
+# Smart Git CLI (`smart-git-cli`)
 
-A lightweight, cost-effective CLI tool built with Python and OpenAI (`gpt-4o-mini`) to automate Git workflows.
-
-> **Status:** 🚧 Under Active Development
+A lightweight CLI developer tool that inspects your `git diff` and automatically generates **Conventional Commits** messages and **release notes** using OpenAI's `gpt-4o-mini`.
 
 ---
 
-## 📌 Project Overview
+## ✨ Features
 
-`smart-git-cli` is a developer tool designed to inspect `git diff` outputs and automatically generate:
-- **Conventional Commits** messages following standard specifications.
-- **Release Notes** and `CHANGELOG` summaries based on commit history.
-
-It leverages `gpt-4o-mini` with structured JSON output to keep execution speed high and token costs minimal (< $0.0001 per run).
+- 🔍 Reads staged diff (falls back to unstaged diff when nothing is staged)
+- ✍️ Generates a Conventional Commit message via `gpt-4o-mini`
+- ✅ Interactive `[Y/n]` confirmation before committing
+- 📝 Generates a clean `CHANGELOG.md` from commits between the last tag and `HEAD`
+- 💸 Cost-effective: short prompts, small `max_tokens`, ~6k char diff cap
+- 🧯 Graceful errors for missing API key, missing repo, or empty diffs
 
 ---
 
-## 🛠️ Planned Tech Stack
+## 🛠️ Tech Stack
 
-- **Language:** Python 3.10+
-- **CLI Framework:** `typer` & `rich`
-- **Git Integration:** `GitPython`
-- **AI Engine:** OpenAI API (`gpt-4o-mini`)
+| Layer      | Tech                        |
+| ---------- | --------------------------- |
+| Language   | Python 3.10+                |
+| CLI        | `typer` + `rich`            |
+| Git        | `GitPython`                 |
+| AI         | OpenAI SDK (`gpt-4o-mini`)  |
+
+---
+
+## 🚀 Installation
+
+```bash
+pip install -e .
+# or
+pip install -r requirements.txt
+```
+
+Then set your API key:
+
+```bash
+setx OPENAI_API_KEY "your-openai-api-key"   # Windows
+# or: export OPENAI_API_KEY="..."           # macOS / Linux
+```
+
+> Restart your terminal after using `setx`.
+
+---
+
+## 📖 Usage
+
+### Automated commit
+
+```bash
+smart-git commit              # uses the staged diff
+smart-git commit --all        # stage everything first, then commit
+```
+
+Flow: read diff → generate message → preview with Rich → confirm `[Y/n]` → commit.
+
+### Release notes
+
+```bash
+smart-git release                          # writes ./CHANGELOG.md
+smart-git release --output NG.md         # custom output path
+smart-git release --limit 50             # cap number of commits
+```
+
+---
+
+## 🏗️ Project Layout
+
+```
+smart_git_cli/
+├── __init__.py      # package metadata
+├── __main__.py      # python -m smart_git_cli
+├── cli.py           # typer app: `commit`, `release`
+├── git_engine.py    # GitPython: diff, tags, commit parsing
+├── ai_engine.py     # OpenAI: commit message + release notes
+└── errors.py        # custom exceptions
+```
+
+---
+
+## ⚠️ Error Handling
+
+| Situation                         | Behavior                                |
+| --------------------------------- | --------------------------------------- |
+| `OPENAI_API_KEY` missing          | Clear error, exit code 1                |
+| Not a git repository              | `NotARepoError`, exit code 1            |
+| Empty diff                        | `NoChangesError`, exit code 1            |
+| OpenAI API/JSON failure            | `AICallError`, graceful message          |
+
+---
+
+## 📝 License
+
+MIT
