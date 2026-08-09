@@ -56,6 +56,46 @@ export OPENAI_API_KEY="..."                 # macOS / Linux
 
 ---
 
+## ⚡ Quick start (in any project)
+
+You don't need this repository in your project — just install the tool once and run it inside any Git repository.
+
+**1. Install globally**
+
+```bash
+pip install git+https://github.com/Khayal07/Smart-Git-CLI.git
+# or, if you cloned it locally:
+# pip install -e /path/to/smart-git-cli
+```
+
+###2. Add your API key
+
+Place a `.env` file in the project where you will run `smart-git` (smart-git reads it from the **current folder**):
+
+```bash
+copy .env.example .env     # Windows  (if you cloned the repo, copy its .env.example)
+cp .env.example .env       # macOS / Linux
+```
+
+Then open `.env` and set your key:
+
+```
+OPENAI_API_KEY=sk-your-api-key
+```
+
+> `.env` is git-ignored automatically, so the key never ends up in your commits.
+
+###3. Use it anywhere
+
+```bash
+smart-git commit     # in your project, after staging some changes
+smart-git release    # writes ./CHANGELOG.md in your project
+```
+
+That's it — no code changes, no imports, no config files inside your app.
+
+---
+
 ## 📖 Usage
 
 ### Automated commit
