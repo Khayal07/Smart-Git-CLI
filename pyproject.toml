@@ -9,7 +9,7 @@ description = "A lightweight Git CLI assistant that generates Conventional Commi
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
-authors = [{ name = "Khayal Aliyev" }]
+authors = [{ name = "Khayal Ismayilzada" }]
 keywords = ["git", "cli", "conventional-commits", "openai", "changelog"]
 dependencies = [
     "typer>=0.9",
