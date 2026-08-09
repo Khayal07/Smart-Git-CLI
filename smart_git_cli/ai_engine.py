@@ -6,6 +6,7 @@ import json
 import os
 from typing import Any
 
+from smart_git_cli.env import load_dotenv
 from smart_git_cli.errors import AICallError, ConfigError
 
 MODEL = "gpt-4o-mini"
@@ -21,7 +22,7 @@ Rules:
 - subject in imperative mood, lowercase, under 72 characters
 - Add a body only if really useful; max 2 lines, no emojis
 
-Reply with JSON only: {"type": "...", "scope": "...", "subject": "...", "body": "..."}
+Reply with JSON only: {{"type": "...", "scope": "...", "subject": "...", "body": "..."}}
 
 DIFF:
 {diff}"""
@@ -31,18 +32,23 @@ RELEASE_PROMPT = """Write clean release notes for a CHANGELOG.md based on these 
 Group them into: ## New features / ## Bug fixes / ## Improvements / ## Documentation
 Drop trivial commits. One short imperative line per bullet. No emojis, no numbers.
 
-Reply with JSON only: {"notes": "full markdown here"}
+Reply with JSON only: {{"notes": "full markdown here"}}
 
 COMMITS:
 {commits}"""
 
 
+def _model() -> str:
+    return os.environ.get("SMART_GIT_MODEL", MODEL)
+
+
 def _client() -> Any:
+    load_dotenv()
     key = os.environ.get("OPENAI_API_KEY")
     if not key:
         raise ConfigError(
-            "OPENAI_API_KEY is not set. Run `setx OPENAI_API_KEY \"your-key\"` "
-            "or set the env var before running smart-git."
+            "OPENAI_API_KEY is not set. Create a .env file from .env.example "
+            "(add your key there) or export the variable, then retry."
         )
     from openai import OpenAI
 
@@ -51,7 +57,7 @@ def _client() -> Any:
 
 def _chat_json(client: Any, prompt: str) -> dict:
     response = client.chat.completions.create(
-        model=MODEL,
+        model=_model(),
         temperature=TEMPERATURE,
         max_tokens=MAX_TOKENS,
         messages=[

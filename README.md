@@ -34,14 +34,25 @@ pip install -e .
 pip install typer rich GitPython openai
 ```
 
-Then set your API key:
+Then configure your API key using a `.env` file (recommended):
 
 ```bash
-setx OPENAI_API_KEY "your-openai-api-key"   # Windows
-# or: export OPENAI_API_KEY="..."           # macOS / Linux
+copy .env.example .env     # Windows
+cp .env.example .env       # macOS / Linux
 ```
 
-> Restart your terminal after using `setx`.
+Open `.env` and paste your key after `OPENAI_API_KEY=`.
+
+> `.env` is git-ignored, so your secrets never get committed. `smart-git` loads
+> it automatically — no `setx`/`export` needed. An existing environment
+> variable always wins over `.env`.
+
+Alternatively, export it manually:
+
+```bash
+setx OPENAI_API_KEY "your-openai-api-key"   # Windows (restart terminal)
+export OPENAI_API_KEY="..."                 # macOS / Linux
+```
 
 ---
 
